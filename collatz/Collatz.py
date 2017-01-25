@@ -36,7 +36,11 @@ def collatz_eval (n) :
     """
     # <your code>
     assert n > 0
-    m = n
+    if n > eager[len(eager)]:
+        eager_cache(n)
+    else :
+        search_cache(n)
+
     assert m > 0
     return m
 
@@ -51,7 +55,14 @@ def eager_cache(n):
             i = i + 1    
         assert i > eager[len(eager)]
         eager.append(i)
-        
+
+def search_cache(n) :
+    assert n < eager[len(eager)]
+    i = 0
+    while n < eager[i]
+        i = i + 1
+    return i 
+
 def create_cache(n) :
     global cache
     for i in range(n) :
