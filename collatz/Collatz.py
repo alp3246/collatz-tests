@@ -9,7 +9,7 @@
 # Copyright (C) 2017
 # Glenn P. Downing
 # ---------------------------
-
+cache = [] 
 # ------------
 # collatz_read
 # ------------
@@ -38,6 +38,11 @@ def collatz_eval (n) :
     m = n
     assert m > 0
     return m
+
+def create_cache(n) :
+    global cache
+    for _ in range(n) :
+        cache.append(cycle_len(n))
 
 def next_num (cur):
     if cur % 2 ==0 :
