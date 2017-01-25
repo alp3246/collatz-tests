@@ -41,8 +41,8 @@ def collatz_eval (n) :
 
 def create_cache(n) :
     global cache
-    for _ in range(n) :
-        cache.append(cycle_len(n))
+    for i in range(n) :
+        cache.append(cycle_len(i))
 
 def next_num (cur):
     if cur % 2 ==0 :
