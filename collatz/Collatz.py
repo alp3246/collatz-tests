@@ -39,6 +39,22 @@ def collatz_eval (n) :
     assert m > 0
     return m
 
+def next_num (cur):
+    if cur % 2 ==0 :
+        return cur / 2
+    else :
+        return 3 * cur + 1
+
+def cycle_len (cur) :
+    count = 1
+    while cur > 1 :
+        cur = next_num(cur)
+        if cur < len(cache) :
+            return count + cache[cur]
+        if (cur &(cur-1) == 0) : #determines if power of 2
+                return count + math.log(cur,2)
+        count = count + 1
+    return count
 # -------------
 # collatz_print
 # -------------
