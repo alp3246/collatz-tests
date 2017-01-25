@@ -10,6 +10,7 @@
 # Glenn P. Downing
 # ---------------------------
 cache = [] 
+eager = []
 # ------------
 # collatz_read
 # ------------
@@ -39,6 +40,18 @@ def collatz_eval (n) :
     assert m > 0
     return m
 
+def eager_cache(n):
+    global eager
+    curMaxLength = 1
+    curMaxIndex = 1
+    cur = 1
+    for i in range (n)
+        while cur <= curMaxLength :
+            cur = collatz_eval(i)
+            i = i + 1    
+        assert i > eager[len(eager)]
+        eager.append(i)
+        
 def create_cache(n) :
     global cache
     for i in range(n) :
