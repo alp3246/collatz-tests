@@ -39,7 +39,7 @@ def collatz_eval (n) :
     if n > eager[len(eager)]:
         eager_cache(n)
     else :
-        search_cache(n)
+        return search_cache(n)
 
     assert m > 0
     return m
@@ -51,7 +51,7 @@ def eager_cache(n):
     cur = 1
     for i in range (n)
         while cur <= curMaxLength :
-            cur = collatz_eval(i)
+            cur = rangeMax(eager[len(eager)],i)
             i = i + 1    
         assert i > eager[len(eager)]
         eager.append(i)
@@ -77,13 +77,24 @@ def next_num (cur):
 def cycle_len (cur) :
     count = 1
     while cur > 1 :
-        cur = next_num(cur)
         if cur < len(cache) :
             return count + cache[cur]
+        cur = next_num(cur)
         if (cur &(cur-1) == 0) : #determines if power of 2
                 return count + math.log(cur,2)
         count = count + 1
     return count
+
+def rangeMax(a,b):
+    cur = 1
+    loc = 1
+    for a in range(b):
+        tmp = cycle_len(a)
+        if  tmp >= cur :
+            cur = tmp
+            loc = a
+    return loc 
+
 # -------------
 # collatz_print
 # -------------
@@ -106,6 +117,9 @@ def collatz_solve (r, w) :
     r a reader
     w a writer
     """
+    create_cache(1000)
+    eager_cache(5000)
+
     t = int(r.readline())
     for _ in range(t) :
         n = collatz_read(r)
