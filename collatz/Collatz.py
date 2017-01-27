@@ -17,7 +17,8 @@ global maxVal
 global maxIndex
 
 cache = []
-eager = []
+eager = [] 
+meta = [1, 2, 3, 6, 7, 9, 18, 19, 25, 27, 54, 55, 73, 97, 129, 171, 231, 235, 313, 327, 649, 654, 655, 667, 703, 871, 1161, 2223, 2322, 2323, 2463, 2919, 3711, 6171, 10971, 13255, 17647, 17673, 23529, 26623, 34239, 35497, 35655, 52527, 77031, 106239, 142587, 156159, 216367, 230631, 410011, 511935, 626331, 837799, 1117065, 1126015, 1501353, 1564063, 1723519, 2298025, 3064033, 3542887, 3732423]
 maxVal = 1
 maxIndex = 1
 
@@ -44,40 +45,17 @@ def collatz_eval (n) :
     n the end of the range [1, n], inclusive
     return the max cycle length of the range [1, n]
     """
-    # <your code>
-    #global cache
-    #global maxVal
-    #global maxIndex
-    if n > len(eager) :
-        create_cache(1000)
-    if n < eager[len(eager) - 1] :
-        return search_cache(n)
-
-    assert n > 0
-    
-    m = 1
-    mi = 1
-    i = 1
-    
-    while i <= n :
-        cur = cache[i]
-        if cur >= m :
-            m = cur
-            mi = i
-        i = i + 1
-    assert mi > 1
-    maxVal = m
-    maxIndex = mi
-    return mi
+    return search_cache(n)
 
 def create_cache(n): #append_list(n):
-    #global cache
-    cache = []
-    eager.append(1)
-    cache.append(1)
-    curMaxLength = cache[0]
+    global cache
+    global eager
+    if len(cache) == 0 :
+        eager.append(1)
+        cache.append(1)
+    curMaxLength = cache[len(cache)-1]
     assert n > len(cache)
-    i = 2
+    i = len(cache)  + 1
     while i < n :
         cur = cycle_len(i)
         cache.append(int(cur))
@@ -85,31 +63,31 @@ def create_cache(n): #append_list(n):
             eager.append(int(i))
             curMaxLength = cur
         i = i + 1
-"""
-def eager_cache(n):
-    #curMaxLength = cache[0]
-    eager.append(1)
-    i = 1
-    while i <= n :
-        cur = cache[i]
-        if cur > eager[len(eager) - 1] :
-            eager.append(int(i))
-            i = i + 1      
-"""
+
 def search_cache(n) :
-    assert n < eager[len(eager)-1]
+    #assert n < meta[len(meta)-1]
+    i = 0
+    if n > meta[len(meta) -1]:
+        return meta[len(meta)-1]
+    while meta[i] <= n :
+        i = i + 1
+    return meta[i -1]
+    """
     i = len(eager)
     while n < eager[i-1] :
         i = i - 1
     return eager[i-1]
-
+    """
 def cycle_len (cur) :
     count = 1
     while cur > 1 :
         if cur % 2 == 0 :
             cur = cur // 2
+            if cur < len(cache) :
+                return count + cache[cur-1]
         else :
-            cur = ( 3 * cur ) + 1
+            cur = (( 3 * cur ) + 1) // 2
+            count = count + 1
         count = count + 1
         if cur & (cur-1) == 0 :
             return count + int(math.log(cur,2))
@@ -138,31 +116,25 @@ def collatz_print (w, m) :
     assert m > 0
     w.write(str(m) + "\n")
 
-def print_debug(w):
-    w.write("cycle_len3 test:" +str(cycle_len(3)) + "\n\texpect 8\n")
-    w.write("cycle_len4 test:" +str(cycle_len(4)) + "\n\texpect 3\n")
-    w.write("cycle_len7 test:" +str(cycle_len(7)) + "\n\texpect 17\n")
-    w.write("Cache:\n")
-    for i in range(30):
-        w.write(str(cache[i]) + " ")
-    w.write("\nEager:\n")
-    for i in range(10):
-        w.write(str(eager[i]) + " ")
-    w.write("\n")
-
 # -------------
 # collatz_solve
 # -------------
+
+def print_cache(w) :
+    i = 0
+    while i < len(eager) :
+        w.write (str(eager[i]) + ", ")
+        i = i + 1 
+
 
 def collatz_solve (r, w) :
     """
     r a reader
     w a writer
     """
-    create_cache(1000)
-    #eager_cache(1000)
-
-    #print_debug(w)
+    #only needed to create meta
+    #create_cache(5000000)
+    #print_cache(w)
 
     t = int(r.readline())
     for _ in range(t) :
@@ -170,5 +142,5 @@ def collatz_solve (r, w) :
         m = collatz_eval(n)
         collatz_print(w, m)
 
-if __name__ == '__main__':
-    collatz_solve(sys.stdin, sys.stdout)
+#if __name__ == '__main__':
+#    collatz_solve(sys.stdin, sys.stdout)
