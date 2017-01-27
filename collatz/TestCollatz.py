@@ -33,7 +33,7 @@ class TestCollatz (TestCase) :
     def test_read (self) :
         r = StringIO("10\n")
         n = collatz_read(r)
-        self.assertEqual(n, 9)
+        self.assertEqual(n, 10)
 
     # ----
     # eval

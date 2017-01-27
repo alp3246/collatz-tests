@@ -48,18 +48,13 @@ def collatz_eval (n) :
     #global cache
     #global maxVal
     #global maxIndex
-    
+    if n > len(eager) :
+        create_cache(1000)
     if n < eager[len(eager) - 1] :
         return search_cache(n)
 
     assert n > 0
-    #if n > len(cache):
-    #    append_list(n)
     
-    #if n > maxIndex :
-     #   i = maxIndex
-      #  mi = maxIndex
-       # m = maxVal
     m = 1
     mi = 1
     i = 1
@@ -77,6 +72,7 @@ def collatz_eval (n) :
 
 def create_cache(n): #append_list(n):
     #global cache
+    cache = []
     eager.append(1)
     cache.append(1)
     curMaxLength = cache[0]
@@ -118,26 +114,6 @@ def cycle_len (cur) :
         if cur & (cur-1) == 0 :
             return count + int(math.log(cur,2))
     return count
-    """
-    count = 1
-    while cur != 1 :
-        if cur % 2 == 0 :
-            cur = cur // 2
-            #if cur < len(cache) : 
-            #    return count + cache[cur -1]
-        else :
-            cur = ( 3 * cur ) + 1
-            if (cur & (cur-1) == 0) :
-                return count + 1 +int(math.log(cur,2))
-            #check for 2^n
-        count = count + 1
-        #if cur < len(cache) :
-        #    return count + cache[cur]
-        #if (cur &(cur-1) == 0) : 
-        #    return count + math.log(cur,2)
-    return count
-    """
-   
 
 def rangeMax(a,b):
     cur = 1
@@ -186,7 +162,7 @@ def collatz_solve (r, w) :
     create_cache(1000)
     #eager_cache(1000)
 
-    print_debug(w)
+    #print_debug(w)
 
     t = int(r.readline())
     for _ in range(t) :
