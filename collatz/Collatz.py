@@ -72,12 +72,7 @@ def search_cache(n) :
     while meta[i] <= n :
         i = i + 1
     return meta[i -1]
-    """
-    i = len(eager)
-    while n < eager[i-1] :
-        i = i - 1
-    return eager[i-1]
-    """
+
 def cycle_len (cur) :
     count = 1
     while cur > 1 :
@@ -92,17 +87,7 @@ def cycle_len (cur) :
         if cur & (cur-1) == 0 :
             return count + int(math.log(cur,2))
     return count
-
-def rangeMax(a,b):
-    cur = 1
-    loc = 1
-    while a <= b:
-        tmp = cycle_len(a)
-        if  tmp >= cur :
-            cur = tmp
-            loc = a
-        a = a + 1
-    return loc   
+  
 # -------------
 # collatz_print
 # -------------
