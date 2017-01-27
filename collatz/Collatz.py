@@ -45,22 +45,25 @@ def collatz_eval (n) :
     return the max cycle length of the range [1, n]
     """
     # <your code>
-    global cache
-    global maxVal
-    global maxIndex
+    #global cache
+    #global maxVal
+    #global maxIndex
     
+    if n < eager[len(eager) - 1] :
+        return search_cache(n)
+
     assert n > 0
     #if n > len(cache):
     #    append_list(n)
-        
-    m = 1
-    mi = 1
-    i = 1
     
     #if n > maxIndex :
      #   i = maxIndex
       #  mi = maxIndex
        # m = maxVal
+    m = 1
+    mi = 1
+    i = 1
+    
     while i <= n :
         cur = cache[i]
         if cur >= m :
@@ -73,51 +76,67 @@ def collatz_eval (n) :
     return mi
 
 def create_cache(n): #append_list(n):
-    global cache
+    #global cache
+    eager.append(1)
+    cache.append(1)
+    curMaxLength = cache[0]
     assert n > len(cache)
-    i = len(cache)
-    while i <= n :
+    i = 2
+    while i < n :
         cur = cycle_len(i)
-        cache.append(cur)
+        cache.append(int(cur))
+        if cur >= curMaxLength :
+            eager.append(int(i))
+            curMaxLength = cur
         i = i + 1
-
+"""
 def eager_cache(n):
-    curMaxLength = 1
-    curMaxIndex = 1
-    cur = 1
-    i = curMaxIndex
+    #curMaxLength = cache[0]
+    eager.append(1)
+    i = 1
     while i <= n :
-        while cur <= curMaxLength :
-            i = i + 1
-            cur = rangeMax(1, i)       
-        assert i > curMaxIndex
-        #global eager
-        eager.append(i)
-        curMaxIndex = i
-        curMaxLength = cur
-
+        cur = cache[i]
+        if cur > eager[len(eager) - 1] :
+            eager.append(int(i))
+            i = i + 1      
+"""
 def search_cache(n) :
     assert n < eager[len(eager)-1]
-    i = 0
-    while n < eager[i+1] :
-        i = i + 1
-    return eager[i]
+    i = len(eager)
+    while n < eager[i-1] :
+        i = i - 1
+    return eager[i-1]
 
 def cycle_len (cur) :
-    global cache
     count = 1
     while cur > 1 :
         if cur % 2 == 0 :
             cur = cur // 2
-            if cur < len(cache) :
-                return count + cache[cur]
         else :
             cur = ( 3 * cur ) + 1
-            #check for 2^n
-            if (cur &(cur-1) == 0) : 
-                return count + 1 + math.log(cur,2)
         count = count + 1
+        if cur & (cur-1) == 0 :
+            return count + int(math.log(cur,2))
     return count
+    """
+    count = 1
+    while cur != 1 :
+        if cur % 2 == 0 :
+            cur = cur // 2
+            #if cur < len(cache) : 
+            #    return count + cache[cur -1]
+        else :
+            cur = ( 3 * cur ) + 1
+            if (cur & (cur-1) == 0) :
+                return count + 1 +int(math.log(cur,2))
+            #check for 2^n
+        count = count + 1
+        #if cur < len(cache) :
+        #    return count + cache[cur]
+        #if (cur &(cur-1) == 0) : 
+        #    return count + math.log(cur,2)
+    return count
+    """
    
 
 def rangeMax(a,b):
@@ -144,7 +163,9 @@ def collatz_print (w, m) :
     w.write(str(m) + "\n")
 
 def print_debug(w):
-    w.write("cycle_len test:" +str(cycle_len(3)))
+    w.write("cycle_len3 test:" +str(cycle_len(3)) + "\n\texpect 8\n")
+    w.write("cycle_len4 test:" +str(cycle_len(4)) + "\n\texpect 3\n")
+    w.write("cycle_len7 test:" +str(cycle_len(7)) + "\n\texpect 17\n")
     w.write("Cache:\n")
     for i in range(30):
         w.write(str(cache[i]) + " ")
@@ -162,10 +183,10 @@ def collatz_solve (r, w) :
     r a reader
     w a writer
     """
-    create_cache(100)
-    eager_cache(500)
+    create_cache(1000)
+    #eager_cache(1000)
 
-    #print_debug(w)
+    print_debug(w)
 
     t = int(r.readline())
     for _ in range(t) :
@@ -175,23 +196,3 @@ def collatz_solve (r, w) :
 
 if __name__ == '__main__':
     collatz_solve(sys.stdin, sys.stdout)
-"""
-def next_num (cur):
-    if cur % 2 ==0 :
-        return cur/2
-    else :
-        return 3 * cur + 1
-
-def compute_length(k):
-    m = m + 1
-    l = next_num(k)
-    if l != 1 :
-        compute_length(l)
-
-update N with frame a1.
-do I = 1 to N with frame a2 down:
-    assign j = i M = 0.
-    run computeLength( input j).
-   display i m.
-end.
-"""
